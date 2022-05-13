@@ -1,4 +1,5 @@
 import gym
+from time import sleep
 import ballbeam_gym
 import matplotlib.pyplot as plt
 
@@ -40,14 +41,23 @@ env = gym.make('BallBeamSetpoint-v0', **kwargs)
 
 a = Agent([10, 0, 1.2])
 
+ball_pos = []
+beam_angle = []
+
 env.reset()
 done = False
 
 for _ in range(100):
     env.render()
+    ball_pos.append(env.bb.x)
+    beam_angle.append(env.bb.theta)
     _, _, done, _ = env.step(a.get_action(env))
 
 print(f"Ball position: {env.bb.x}")
-a.graph()
+plt.ioff()
+plt.figure().clear('all')
+plt.plot(range(100), ball_pos)
+plt.plot(range(100), beam_angle)
+plt.show()
 
 env.close()
